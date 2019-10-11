@@ -1,4 +1,4 @@
-from utils import *
+from .utils import *
 import json
 import urllib
 import pandas as pd

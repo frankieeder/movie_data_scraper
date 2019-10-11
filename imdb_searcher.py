@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import urllib.parse
 from lxml.html.soupparser import fromstring
-from models.utils import *
+from .utils import *
 
 # SEARCHERS
 def search_imdb(query, results=True, query_type=None):
