@@ -5,8 +5,29 @@ import csv
 import pickle
 import ssl
 import urllib
+import json
 
 UNVERIFIED_CONTEXT = ssl._create_unverified_context()
+
+class Scraper:
+    def __init__(self):
+        self.f = func
+        self.file = file
+        if os.path.isfile(file):
+            with open(file, 'rb') as input_stream:
+                self.memo = pickle.load(input_stream)
+        else:
+            self.memo = dict()
+
+    def memoizeToFile(self, method):
+        def memoizer(*args):
+            if method not in self.memo:
+                self.memo[method] = dict()
+            if args not in self.memo[method]:
+                self.memo[method][args] = method(args)
+            return self.memo[method][args]
+        return memoizer
+
 
 class Memoizer:
     def __init__(self, func, file):
@@ -148,3 +169,12 @@ def apply_dicts_keywise(dicts, f, default):
     for key in all_keys:
         max_dict[key] = f((d[key] if (key in d) else default) for d in dicts)
     return max_dict
+
+def get_json(json_url):
+    response = urllib.request.urlopen(json_url, context=UNVERIFIED_CONTEXT)
+    data = json.loads(response.read())
+    return data
+
+def dict_to_query_string(dict):
+    args = [f"{k}={v}" for k, v in dict.items()]
+    return "&".join(args)
